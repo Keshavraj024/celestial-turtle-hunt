@@ -24,7 +24,7 @@ namespace celestial_turtle_spawner
         return randomNum;
     }
 
-    void offTrailLine(const std::shared_ptr<rclcpp::Node> &node, const std::string &turtleName);
+    void offTrailLine(rclcpp::Node *node, const std::string &turtleName);
 
 } /* namespace celestial_turtle_spawner */
 
