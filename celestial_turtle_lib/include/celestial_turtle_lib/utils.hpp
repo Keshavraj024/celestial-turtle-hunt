@@ -3,6 +3,7 @@
 #include <iostream>
 #include <random>
 #include "turtlesim/srv/set_pen.hpp"
+#include "turtlesim/srv/kill.hpp"
 #include "chrono"
 #include "rclcpp/rclcpp.hpp"
 
@@ -25,6 +26,7 @@ namespace celestial_turtle_lib
     }
 
     void offTrailLine(rclcpp::Node *node, const std::string &turtleName);
+    void killTurtle(rclcpp::Node *node, const std::string &turlteName);
 
 } /* namespace celestial_turtle_lib */
 

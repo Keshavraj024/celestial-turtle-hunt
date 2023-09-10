@@ -17,7 +17,7 @@ add_executable(celestial_turtle_spawner
   src/turtle_spawner.cpp
 )
 
-target_include_directories(celestial_turtle_spawner PRIVATE include ${celestial_turtle_lib_INCLUDE_DIRS})
+target_include_directories(celestial_turtle_spawner PRIVATE include )
 ament_target_dependencies(celestial_turtle_spawner rclcpp turtlesim celestial_turtle_interface celestial_turtle_lib)
 
 

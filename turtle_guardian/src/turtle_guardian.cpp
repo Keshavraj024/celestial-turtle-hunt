@@ -10,34 +10,13 @@ TurtleGuardian::TurtleGuardian() : Node("turtle_guardian_node")
     m_spawnPositionX = this->get_parameter("spawn_position_x").as_double();
     m_spawnPositionY = this->get_parameter("spawn_position_y").as_double();
     m_spawnOrientation = this->get_parameter("spawn_orientation").as_double();
-    
-    m_killThread = std::thread(std::bind(&TurtleGuardian::killTurtle, this, "turtle1"));
     m_spawnThread = std::thread(std::bind(&TurtleGuardian::spawnTurle, this));
 }
 
-void TurtleGuardian::killTurtle(const std::string &turlteName)
-{
-    auto client = this->create_client<turtlesim::srv::Kill>("kill");
-    while (!client->wait_for_service(std::chrono::seconds(1)))
-    {
-        RCLCPP_INFO(this->get_logger(), "Waiiting for kill service");
-    }
-    auto request = std::make_shared<turtlesim::srv::Kill::Request>();
-    request->name = turlteName;
-
-    try
-    {
-        client->async_send_request(request);
-        RCLCPP_INFO(this->get_logger(), "Killed a turtle with name =  %s", request->name.c_str());
-    }
-    catch (const std::exception &e)
-    {
-        RCLCPP_ERROR(this->get_logger(), "Could not Kill the turtle!");
-    }
-}
 
 void TurtleGuardian::spawnTurle()
 {
+    celestial_turtle_lib::killTurtle(this,"turtle1");
     auto client = this->create_client<turtlesim::srv::Spawn>("spawn");
     while (!client->wait_for_service(std::chrono::seconds(1)))
     {

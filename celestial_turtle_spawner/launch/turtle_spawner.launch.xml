@@ -1,4 +1,6 @@
 <launch>
-    <node pkg="celestial_turtle_spawner" exec="celestial_turtle_spawner"/>
     <node pkg="celestial_turtle_spawner" exec="celestial_turtle_mover"/>
+    <node pkg="celestial_turtle_spawner" exec="celestial_turtle_spawner">
+        <param name="max_turtles" value="1"/>
+    </node>
 </launch>

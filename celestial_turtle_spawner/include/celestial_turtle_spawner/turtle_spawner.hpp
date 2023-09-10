@@ -9,6 +9,7 @@
 #include "celestial_turtle_interface/msg/turtles.hpp"
 #include "celestial_turtle_interface/msg/turtle.hpp"
 #include "turtlesim/srv/spawn.hpp"
+#include "celestial_turtle_lib/utils.hpp"
 
 namespace celestial_turtle_spawner
 {
@@ -35,7 +36,7 @@ namespace celestial_turtle_spawner
         std::vector<std::thread> m_spawnThreads;                                                       /**< Threads calling spawn turtle service*/
         std::vector<celestial_turtle_interface::msg::Turtle> m_aliveTurtles;                           /**< List of alive turtles*/
         rclcpp::Publisher<celestial_turtle_interface::msg::Turtles>::SharedPtr m_aliveTurtlePublisher; /**< Publishes the alive turtles information*/
-        unsigned int m_maxTurtles{3};
+        std::size_t m_maxTurtles{1};
         rclcpp::TimerBase::SharedPtr m_aliveTurtlePublishertimer;
         celestial_turtle_interface::msg::Turtles m_aliveTurtle;
     };

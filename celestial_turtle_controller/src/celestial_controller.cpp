@@ -1,22 +1,32 @@
 #include "celestial_turtle_controller/celestial_controller.hpp"
+#include "turtlesim/srv/kill.hpp"
 
 namespace celestial_turtle_controller
 {
     TurtleController::TurtleController() : Node("turtle_controller")
     {
+        m_aliveTurtlePublisher = this->create_publisher<celestial_turtle_interface::msg::Turtles>("alive_turtles", 10);
         m_aliveTurleSubscriber = this->create_subscription<celestial_turtle_interface::msg::Turtles>("alive_turtles",
                                                                                                      10, std::bind(&TurtleController::callbackAliveTurtles, this, std::placeholders::_1));
+
+        m_guardianTurtlePoseSubscriber = this->create_subscription<turtlesim::msg::Pose>("/TurtleGuardian/pose",
+                                                                                         10, std::bind(&TurtleController::guardianTurtlePoseCallback, this, std::placeholders::_1));
+    }
+
+    void TurtleController::guardianTurtlePoseCallback(const turtlesim::msg::Pose::SharedPtr pose)
+    {
+        m_guardianTurtlePose = pose;
     }
 
     void TurtleController::callbackAliveTurtles(const celestial_turtle_interface::msg::Turtles::SharedPtr alive_turtles)
     {
-        auto aliveTurtles = alive_turtles->turtles;
-        if (aliveTurtles.empty())
+        m_aliveTurtles = alive_turtles->turtles;
+        if (m_aliveTurtles.empty())
         {
             return;
         }
         turtlesim::msg::Pose poseMsg;
-        for (const auto &turtle : aliveTurtles)
+        for (const auto &turtle : m_aliveTurtles)
         {
             std::string topic_name = "/" + turtle.name + "/pose";
 
@@ -30,12 +40,23 @@ namespace celestial_turtle_controller
     void TurtleController::processTurtlePose(const celestial_turtle_interface::msg::Turtle &turtle, const turtlesim::msg::Pose::SharedPtr pose_msg)
     {
         RCLCPP_INFO(get_logger(), "Turtle name: %s", turtle.name.c_str());
-        RCLCPP_INFO(get_logger(), "Turtle Pose Y: %.2f", pose_msg->y);
+        RCLCPP_INFO(get_logger(), "Turtle Pose Y: %.2f", std::abs(pose_msg->y - m_guardianTurtlePose->y));
+        RCLCPP_INFO(get_logger(), "Turtle Pose X: %.2f", std::abs(pose_msg->x - m_guardianTurtlePose->x));
 
         if (pose_msg->y <= 0)
         {
             RCLCPP_INFO(get_logger(), "Turtle %s reached the ground", turtle.name.c_str());
             rclcpp::shutdown();
+        }
+        else if (std::abs(pose_msg->y - m_guardianTurtlePose->y) <= 1.0 && std::abs(pose_msg->x - m_guardianTurtlePose->x) <= 1.0)
+        {
+            RCLCPP_INFO(get_logger(), "Kill the turtle");
+            celestial_turtle_lib::killTurtle(this, turtle.name);
+            auto turtleToRemove = std::remove_if(m_aliveTurtles.begin(), m_aliveTurtles.end(), [turtle](const auto &turtleElement)
+                                                 { return turtleElement.name == turtle.name; });
+            m_aliveTurtles.erase(turtleToRemove);
+            stillAliveTurtle.turtles = m_aliveTurtles;
+            m_aliveTurtlePublisher->publish(stillAliveTurtle);
         }
     }
 

@@ -10,13 +10,14 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(turtlesim REQUIRED)
 find_package(celestial_turtle_interface REQUIRED)
+find_package(celestial_turtle_lib REQUIRED)
 
 add_executable(celestial_turtle_controller
   src/celestial_controller.cpp
 )
 
 target_include_directories(celestial_turtle_controller PRIVATE include)
-ament_target_dependencies(celestial_turtle_controller rclcpp turtlesim celestial_turtle_interface)
+ament_target_dependencies(celestial_turtle_controller rclcpp turtlesim celestial_turtle_interface celestial_turtle_lib)
 
 install(TARGETS
   celestial_turtle_controller

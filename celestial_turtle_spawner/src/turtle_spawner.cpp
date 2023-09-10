@@ -1,20 +1,15 @@
 #include "celestial_turtle_spawner/turtle_spawner.hpp"
-#include "celestial_turtle_lib/utils.hpp"
+
 
 namespace celestial_turtle_spawner
 {
     TurtleSpawner::TurtleSpawner() : Node("celestial_turtle_spawner")
     {
-        this->declare_parameter("max_turtles", 3);
+        this->declare_parameter("max_turtles", 1);
         m_maxTurtles = this->get_parameter("max_turtles").as_int();
-        m_timer = this->create_wall_timer(std::chrono::seconds(1), std::bind(&TurtleSpawner::TimerCallBack, this));
+        m_timer = this->create_wall_timer(std::chrono::seconds(5), std::bind(&TurtleSpawner::TimerCallBack, this));
         m_aliveTurtlePublisher = this->create_publisher<celestial_turtle_interface::msg::Turtles>("alive_turtles", 10);
         m_aliveTurtlePublishertimer = this->create_wall_timer(std::chrono::seconds(1), std::bind(&TurtleSpawner::PublishAliveTurtles, this));
-    }
-
-    void TurtleSpawner::SetMaxTurtlesToSpawn(unsigned int maxTurtles)
-    {
-        m_maxTurtles = maxTurtles;
     }
 
     void TurtleSpawner::TimerCallBack()
