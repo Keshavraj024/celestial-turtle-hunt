@@ -1,11 +1,11 @@
 #include "turtle_guardian/turtle_guardian.hpp"
-#include "turtlesim/srv/spawn.hpp"
 #include "chrono"
 
 TurtleGuardian::TurtleGuardian() : Node("turtle_guardian_node")
 {
     m_killThread = std::thread(std::bind(&TurtleGuardian::killTurtle, this, "turtle1"));
     m_spawnThread = std::thread(std::bind(&TurtleGuardian::spawnTurle, this));
+    // m_offTrailLine = std::thread(std::bind(&TurtleGuardian::offTrailLine, this));
 }
 
 void TurtleGuardian::killTurtle(const std::string &turlteName)
@@ -16,10 +16,17 @@ void TurtleGuardian::killTurtle(const std::string &turlteName)
         RCLCPP_INFO(this->get_logger(), "Waiiting for kill service");
     }
     auto request = std::make_shared<turtlesim::srv::Kill::Request>();
-    request->name = turlteName;
+    request->name = "turtle2";
 
-    auto result = client->async_send_request(request);
-
+    try
+    {
+        auto result = client->async_send_request(request);
+        RCLCPP_INFO(this->get_logger(), "Killed a turtle with name =  %s", request->name.c_str());
+    }
+    catch (const std::exception &e)
+    {
+        RCLCPP_ERROR(this->get_logger(), "Could not Kill the turtle!");
+    }
 }
 
 void TurtleGuardian::spawnTurle()
@@ -34,7 +41,7 @@ void TurtleGuardian::spawnTurle()
     request->y = 1.0;
     request->theta = M_PI / 2.0;
     request->name = "TurtleGuardian";
-    
+
     auto result = client->async_send_request(request);
     try
     {

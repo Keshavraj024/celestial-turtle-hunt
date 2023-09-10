@@ -57,6 +57,7 @@ namespace celestial_turtle_spawner
             turtle.theta = request->theta;
             turtle.name = response->name;
             m_aliveTurtles.push_back(turtle);
+            offTrailLine(turtle.name);
             PublishAliveTurtles();
         }
         catch (const std::exception &e)

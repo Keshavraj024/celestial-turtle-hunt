@@ -3,7 +3,8 @@
 
 #include "rclcpp/rclcpp.hpp"
 #include "turtlesim/srv/kill.hpp"
-#include "thread"
+#include "turtlesim/srv/spawn.hpp"
+#include "turtlesim/srv/set_pen.hpp"
 
 class TurtleGuardian : public rclcpp::Node
 {
@@ -13,10 +14,10 @@ public:
 private:
     void killTurtle(const std::string &turlteName);
     void spawnTurle();
+    void offTrailLine();
     std::thread m_killThread;
     std::thread m_spawnThread;
-
-
+    
 };
 
 #endif

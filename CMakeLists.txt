@@ -11,6 +11,10 @@ find_package(rclcpp REQUIRED)
 find_package(turtlesim REQUIRED)
 find_package(geometry_msgs REQUIRED)
 
+install(DIRECTORY
+        launch
+        DESTINATION share/${PROJECT_NAME})
+
 
 add_executable(turtle_guardian_node src/turtle_guardian_node.cpp src/turtle_guardian.cpp)
 target_include_directories(turtle_guardian_node PRIVATE include)

@@ -1,6 +1,7 @@
 #ifndef CELESTIAL_TURTLE_SPAWNER__UTILS_HPP_
 #define CELESTIAL_TURTLE_SPAWNER__UTILS_HPP_
 #include <random>
+#include "turtlesim/srv/set_pen.hpp"
 
 namespace celestial_turtle_spawner
 {
@@ -19,6 +20,8 @@ namespace celestial_turtle_spawner
 
         return randomNum;
     }
+    
+    void offTrailLine();
 
 } /* namespace celestial_turtle_spawner */
 
