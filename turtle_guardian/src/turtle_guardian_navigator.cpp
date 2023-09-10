@@ -59,7 +59,6 @@ void TurtleGuardianNavigator::moveTurtle()
     tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
     rclcpp::shutdown();
     
-    // Restore the original terminal settings
 }
 
 int main(int argc, char **argv)
