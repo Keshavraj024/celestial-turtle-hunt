@@ -9,6 +9,7 @@ namespace celestial_turtle_spawner
         m_maxTurtles = this->get_parameter("max_turtles").as_int();
         m_timer = this->create_wall_timer(std::chrono::seconds(1), std::bind(&TurtleSpawner::TimerCallBack, this));
         m_aliveTurtlePublisher = this->create_publisher<celestial_turtle_interface::msg::Turtles>("alive_turtles", 10);
+        m_aliveTurtlePublishertimer = this->create_wall_timer(std::chrono::seconds(1), std::bind(&TurtleSpawner::PublishAliveTurtles, this));
     }
 
     void TurtleSpawner::SetMaxTurtlesToSpawn(unsigned int maxTurtles)
@@ -58,7 +59,7 @@ namespace celestial_turtle_spawner
             turtle.name = response->name;
             m_aliveTurtles.push_back(turtle);
             celestial_turtle_lib::offTrailLine(this, turtle.name);
-            PublishAliveTurtles();
+            // PublishAliveTurtles();
         }
         catch (const std::exception &e)
         {
@@ -68,10 +69,9 @@ namespace celestial_turtle_spawner
 
     void TurtleSpawner::PublishAliveTurtles()
     {
-        RCLCPP_ERROR(this->get_logger(), "PublishAliveTurtles");
-        auto message = celestial_turtle_interface::msg::Turtles();
-        message.turtles = m_aliveTurtles;
-        m_aliveTurtlePublisher->publish(message);
+        RCLCPP_INFO(this->get_logger(), "PublishAliveTurtles");
+        m_aliveTurtle.turtles = m_aliveTurtles;
+        m_aliveTurtlePublisher->publish(m_aliveTurtle);
     }
 
 }

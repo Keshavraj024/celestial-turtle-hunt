@@ -36,6 +36,8 @@ namespace celestial_turtle_spawner
         std::vector<celestial_turtle_interface::msg::Turtle> m_aliveTurtles;                           /**< List of alive turtles*/
         rclcpp::Publisher<celestial_turtle_interface::msg::Turtles>::SharedPtr m_aliveTurtlePublisher; /**< Publishes the alive turtles information*/
         unsigned int m_maxTurtles{3};
+        rclcpp::TimerBase::SharedPtr m_aliveTurtlePublishertimer;
+        celestial_turtle_interface::msg::Turtles m_aliveTurtle;
     };
 
 } /* namespace celestial_turtle_spawner */
