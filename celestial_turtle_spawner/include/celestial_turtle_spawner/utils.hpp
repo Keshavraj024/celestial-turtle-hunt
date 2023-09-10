@@ -1,7 +1,10 @@
 #ifndef CELESTIAL_TURTLE_SPAWNER__UTILS_HPP_
 #define CELESTIAL_TURTLE_SPAWNER__UTILS_HPP_
+#include <iostream>
 #include <random>
 #include "turtlesim/srv/set_pen.hpp"
+#include "chrono"
+#include "rclcpp/rclcpp.hpp"
 
 namespace celestial_turtle_spawner
 {
@@ -20,8 +23,8 @@ namespace celestial_turtle_spawner
 
         return randomNum;
     }
-    
-    void offTrailLine();
+
+    void offTrailLine(const std::shared_ptr<rclcpp::Node> &node, const std::string &turtleName);
 
 } /* namespace celestial_turtle_spawner */
 

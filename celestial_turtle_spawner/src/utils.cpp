@@ -1,16 +1,16 @@
 
 #include "celestial_turtle_spawner/utils.hpp"
-
-void offTrailLine(const std::string &turtleName)
+namespace celestial_turtle_spawner
 {
-    auto client = this->create_client<turtlesim::srv::SetPen>("/"+turtleName+"/set_pen");
-    while (!client->wait_for_service(std::chrono::seconds(1)))
+    void offTrailLine(const std::shared_ptr<rclcpp::Node> &node, const std::string &turtleName)
     {
-        RCLCPP_INFO(this->get_logger(), "Waiiting for Spawn service");
+        auto client = node->create_client<turtlesim::srv::SetPen>("/" + turtleName + "/set_pen");
+        while (!client->wait_for_service(std::chrono::seconds(1)))
+        {
+        }
+        auto request = std::make_shared<turtlesim::srv::SetPen::Request>();
+        request->off = 1;
+
+        auto result = client->async_send_request(request);
     }
-    auto request = std::make_shared<turtlesim::srv::SetPen::Request>();
-    request->off = 1;
-
-    auto result = client->async_send_request(request);
-
 }

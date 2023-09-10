@@ -14,6 +14,7 @@ find_package(celestial_turtle_interface REQUIRED)
 
 add_executable(celestial_turtle_spawner 
   src/turtle_spawner.cpp
+  src/utils.cpp
 )
 
 target_include_directories(celestial_turtle_spawner PRIVATE include)
