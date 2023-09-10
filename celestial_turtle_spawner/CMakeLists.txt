@@ -17,10 +17,8 @@ add_executable(celestial_turtle_spawner
   src/turtle_spawner.cpp
 )
 
-target_include_directories(celestial_turtle_spawner PRIVATE include)
-include_directories(${celestial_turtle_lib_INCLUDE_DIRS})
-target_link_libraries(celestial_turtle_spawner celestial_turtle_lib)
-ament_target_dependencies(celestial_turtle_spawner rclcpp turtlesim celestial_turtle_interface )
+target_include_directories(celestial_turtle_spawner PRIVATE include ${celestial_turtle_lib_INCLUDE_DIRS})
+ament_target_dependencies(celestial_turtle_spawner rclcpp turtlesim celestial_turtle_interface celestial_turtle_lib)
 
 
 add_executable(celestial_turtle_mover
@@ -29,10 +27,6 @@ add_executable(celestial_turtle_mover
 
 target_include_directories(celestial_turtle_mover PRIVATE include)
 ament_target_dependencies(celestial_turtle_mover rclcpp turtlesim celestial_turtle_interface geometry_msgs)
-
-# Link the celestial_turtle_lib library to the executables
-
-
 
 install(TARGETS
   celestial_turtle_spawner

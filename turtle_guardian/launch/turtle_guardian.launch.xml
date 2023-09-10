@@ -1,4 +1,8 @@
 <launch>
     <node pkg="turtlesim" exec="turtlesim_node"/>
-    <node pkg="turtle_guardian" exec="turtle_guardian_node"/>
+    <node pkg="turtle_guardian" exec="turtle_guardian_node">
+        <param name="spawn_position_x" value="5.544445"/>
+        <param name="spawn_position_y" value="1.0"/>
+        <param name="spawn_orientation" value="1.5708"/>
+    </node>
 </launch>

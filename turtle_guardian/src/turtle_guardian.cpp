@@ -3,9 +3,16 @@
 
 TurtleGuardian::TurtleGuardian() : Node("turtle_guardian_node")
 {
+    this->declare_parameter("spawn_position_x", 0.0);
+    this->declare_parameter("spawn_position_y", 0.0);
+    this->declare_parameter("spawn_orientation", 0.0);
+
+    m_spawnPositionX = this->get_parameter("spawn_position_x").as_double();
+    m_spawnPositionY = this->get_parameter("spawn_position_y").as_double();
+    m_spawnOrientation = this->get_parameter("spawn_orientation").as_double();
+    
     m_killThread = std::thread(std::bind(&TurtleGuardian::killTurtle, this, "turtle1"));
     m_spawnThread = std::thread(std::bind(&TurtleGuardian::spawnTurle, this));
-    // m_offTrailLine = std::thread(std::bind(&TurtleGuardian::offTrailLine, this));
 }
 
 void TurtleGuardian::killTurtle(const std::string &turlteName)
@@ -16,11 +23,11 @@ void TurtleGuardian::killTurtle(const std::string &turlteName)
         RCLCPP_INFO(this->get_logger(), "Waiiting for kill service");
     }
     auto request = std::make_shared<turtlesim::srv::Kill::Request>();
-    request->name = "turtle2";
+    request->name = turlteName;
 
     try
     {
-        auto result = client->async_send_request(request);
+        client->async_send_request(request);
         RCLCPP_INFO(this->get_logger(), "Killed a turtle with name =  %s", request->name.c_str());
     }
     catch (const std::exception &e)
@@ -37,9 +44,9 @@ void TurtleGuardian::spawnTurle()
         RCLCPP_INFO(this->get_logger(), "Waiiting for Spawn service");
     }
     auto request = std::make_shared<turtlesim::srv::Spawn::Request>();
-    request->x = 5.544445;
-    request->y = 1.0;
-    request->theta = M_PI / 2.0;
+    request->x = m_spawnPositionX;
+    request->y = m_spawnPositionY;
+    request->theta = m_spawnOrientation;
     request->name = "TurtleGuardian";
 
     auto result = client->async_send_request(request);
@@ -53,6 +60,7 @@ void TurtleGuardian::spawnTurle()
         }
 
         RCLCPP_INFO(this->get_logger(), "Created a turtle with name =  %s", response->name.c_str());
+        celestial_turtle_lib::offTrailLine(this, response->name);
     }
     catch (const std::exception &e)
     {

@@ -2,6 +2,8 @@
 
 TurtleGuardianNavigator::TurtleGuardianNavigator() : Node("turtle_guardian_navigator_node")
 {
+    this->declare_parameter("linear_velocity", 0.0);
+    m_linearVel = this->get_parameter("linear_velocity").as_double();
     m_cmdVelPublisher = this->create_publisher<geometry_msgs::msg::Twist>("/TurtleGuardian/cmd_vel", 10);
     m_turtlePoseSubscriber = this->create_subscription<turtlesim::msg::Pose>("/TurtleGuardian/pose", 10,
                                                                              std::bind(&TurtleGuardianNavigator::poseCallback, this, std::placeholders::_1));
@@ -32,30 +34,31 @@ void TurtleGuardianNavigator::moveTurtle()
             {
                 if (ch[2] == 'D')
                 {
-                    if (m_pose && m_pose->x <= 0.5)
+                    if (m_pose && m_pose->x <= m_minX)
                     {
                         m_vel.linear.y = 0.0;
                     }
                     else
-                        m_vel.linear.y = 1.0;
+                        m_vel.linear.y = m_linearVel;
                     m_cmdVelPublisher->publish(m_vel);
                 }
                 else if (ch[2] == 'C')
                 {
-                    if (m_pose && m_pose->x >= 9.5)
+                    if (m_pose && m_pose->x >= m_maxX)
                     {
                         m_vel.linear.y = 0.0;
                     }
                     else
-                        m_vel.linear.y = -1.0;
+                        m_vel.linear.y = -m_linearVel;
                     m_cmdVelPublisher->publish(m_vel);
                 }
             }
         }
     } while (ch[0] != 'q' && ch[0] != 'Q');
 
-    rclcpp::shutdown();
     tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+    rclcpp::shutdown();
+    
     // Restore the original terminal settings
 }
 

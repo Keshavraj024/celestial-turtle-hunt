@@ -15,15 +15,16 @@ public:
     TurtleGuardianNavigator();
 
 private:
-    rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr m_cmdVelPublisher;    /**< Publishes the command veloctiy */
-    rclcpp::Subscription<turtlesim::msg::Pose>::SharedPtr m_turtlePoseSubscriber; /**< Subscribes to the master turtle's pose*/
     void moveTurtle();
     void poseCallback(const turtlesim::msg::Pose::SharedPtr poseMsg);
+    rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr m_cmdVelPublisher;
+    rclcpp::Subscription<turtlesim::msg::Pose>::SharedPtr m_turtlePoseSubscriber;
     geometry_msgs::msg::Twist m_vel;
     turtlesim::msg::Pose::SharedPtr m_pose;
-    // turtlesim::msg::Pose m_pose;
     std::thread m_moveThread;
-    
+    double m_minX{0.5};
+    double m_maxX{10.0};
+    double m_linearVel{1.0};
 };
 
 #endif
