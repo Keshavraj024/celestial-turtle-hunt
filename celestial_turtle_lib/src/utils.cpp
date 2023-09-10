@@ -1,8 +1,8 @@
 
-#include "celestial_turtle_spawner/utils.hpp"
-namespace celestial_turtle_spawner
+#include "celestial_turtle_lib/utils.hpp"
+namespace celestial_turtle_lib
 {
-    void offTrailLine(rclcpp::Node* node, const std::string &turtleName)
+    void offTrailLine(rclcpp::Node *node, const std::string &turtleName)
     {
         auto client = node->create_client<turtlesim::srv::SetPen>("/" + turtleName + "/set_pen");
         while (!client->wait_for_service(std::chrono::seconds(1)))

@@ -1,12 +1,12 @@
-#ifndef CELESTIAL_TURTLE_SPAWNER__UTILS_HPP_
-#define CELESTIAL_TURTLE_SPAWNER__UTILS_HPP_
+#ifndef CELESTIAL_TURTLE_LIB__UTILS_HPP_
+#define CELESTIAL_TURTLE_LIB__UTILS_HPP_
 #include <iostream>
 #include <random>
 #include "turtlesim/srv/set_pen.hpp"
 #include "chrono"
 #include "rclcpp/rclcpp.hpp"
 
-namespace celestial_turtle_spawner
+namespace celestial_turtle_lib
 {
     template <typename T>
     T GenerateRandomNumber(T min, T max)
@@ -26,6 +26,6 @@ namespace celestial_turtle_spawner
 
     void offTrailLine(rclcpp::Node *node, const std::string &turtleName);
 
-} /* namespace celestial_turtle_spawner */
+} /* namespace celestial_turtle_lib */
 
-#endif /* CELESTIAL_TURTLE_SPAWNER__UTILS_HPP_ */
+#endif /* CELESTIAL_TURTLE_LIB__UTILS_HPP_ */

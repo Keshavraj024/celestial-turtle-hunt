@@ -1,5 +1,5 @@
 #include "celestial_turtle_spawner/turtle_spawner.hpp"
-#include "celestial_turtle_spawner/utils.hpp"
+#include "celestial_turtle_lib/utils.hpp"
 
 namespace celestial_turtle_spawner
 {
@@ -36,7 +36,7 @@ namespace celestial_turtle_spawner
         }
 
         auto request = std::make_shared<turtlesim::srv::Spawn::Request>();
-        request->x = GenerateRandomNumber(0.0, 10.5);
+        request->x = celestial_turtle_lib::GenerateRandomNumber(0.0, 10.5);
         request->y = 10.5;
         request->theta = -M_PI / 2;
 
@@ -57,7 +57,7 @@ namespace celestial_turtle_spawner
             turtle.theta = request->theta;
             turtle.name = response->name;
             m_aliveTurtles.push_back(turtle);
-            offTrailLine(this, turtle.name);
+            celestial_turtle_lib::offTrailLine(this, turtle.name);
             PublishAliveTurtles();
         }
         catch (const std::exception &e)
