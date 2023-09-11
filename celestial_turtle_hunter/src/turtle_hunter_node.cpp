@@ -3,7 +3,7 @@
 int main(int argc, char **argv)
 {
     rclcpp::init(argc, argv);
-    auto node = std::make_shared<TurtleHunter>();
+    auto node = std::make_shared<celestial_turtle_hunter::TurtleHunter>();
     rclcpp::spin(node);
     rclcpp::shutdown();
     return 0;
