@@ -5,13 +5,15 @@ namespace celestial_turtle_spawner
     TurtleSpawner::TurtleSpawner() : Node("celestial_turtle_spawner")
     {
         this->declare_parameter("max_turtles", 1);
+        this->declare_parameter("is_play_by_level", false);
         m_maxTurtles = this->get_parameter("max_turtles").as_int();
+        m_playByLevel = this->get_parameter("is_play_by_level").as_bool();
         m_timer = this->create_wall_timer(std::chrono::seconds(3), std::bind(&TurtleSpawner::TimerCallBack, this));
         m_aliveTurtlePublisher = this->create_publisher<celestial_turtle_interface::msg::Turtles>("alive_turtles", 10);
         m_killTurtleServer = this->create_service<celestial_turtle_interface::srv::KillTurtle>("kill_turtle",
                                                                                                std::bind(&TurtleSpawner::killTurtleCallback, this, std::placeholders::_1, std::placeholders::_2));
         m_shutdownRequestSubscriber = this->create_subscription<std_msgs::msg::Bool>("kill_nodes",
-                                                                              10, std::bind(&TurtleSpawner::shutdownRequestCallback, this, std::placeholders::_1));
+                                                                                     10, std::bind(&TurtleSpawner::shutdownRequestCallback, this, std::placeholders::_1));
     }
     void TurtleSpawner::shutdownRequestCallback(const std_msgs::msg::Bool::SharedPtr shouldTerminate)
     {
@@ -51,7 +53,7 @@ namespace celestial_turtle_spawner
 
     void TurtleSpawner::SpawnTurtle()
     {
-        if (m_turtleSpawned.size() >= m_maxTurtles)
+        if (m_turtleSpawned.size() >= m_maxTurtles && m_playByLevel)
         {
             return;
         }

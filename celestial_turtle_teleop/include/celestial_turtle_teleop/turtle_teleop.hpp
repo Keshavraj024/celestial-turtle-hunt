@@ -24,7 +24,7 @@ private:
     std::thread m_moveThread;
     double m_minX{0.5};
     double m_maxX{10.0};
-    double m_linearVel{1.0};
+    double m_linearVel{2.0};
 };
 
 #endif

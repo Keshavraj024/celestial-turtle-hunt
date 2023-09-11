@@ -32,7 +32,7 @@ namespace celestial_turtle_spawner
             if (cmdVelPublisher)
             {
                 auto cmdVelocityMessage = geometry_msgs::msg::Twist();
-                cmdVelocityMessage.linear.x = 2.0;
+                cmdVelocityMessage.linear.x = 1.0;
                 cmdVelPublisher->publish(cmdVelocityMessage);
             }
         }

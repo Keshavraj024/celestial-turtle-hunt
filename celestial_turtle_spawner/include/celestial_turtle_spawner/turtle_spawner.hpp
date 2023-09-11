@@ -57,15 +57,25 @@ namespace celestial_turtle_spawner
         void killTurtleCallback(const celestial_turtle_interface::srv::KillTurtle::Request::SharedPtr &request,
                                 const celestial_turtle_interface::srv::KillTurtle::Response::SharedPtr &response);
 
-        std::vector<std::thread> m_killThreads;
-        rclcpp::TimerBase::SharedPtr m_timer;
-        rclcpp::Service<celestial_turtle_interface::srv::KillTurtle>::SharedPtr m_killTurtleServer;
-        std::vector<std::thread> m_spawnThreads;
-        std::vector<celestial_turtle_interface::msg::Turtle> m_turtleSpawned;
-        rclcpp::Publisher<celestial_turtle_interface::msg::Turtles>::SharedPtr m_aliveTurtlePublisher;
-        std::size_t m_maxTurtles{1};
-        celestial_turtle_interface::msg::Turtles m_aliveTurtles;
-        rclcpp::Subscription<std_msgs::msg::Bool>::SharedPtr m_shutdownRequestSubscriber;
+        std::vector<std::thread> m_killThreads; /**< Stores threads responsible for killing turtles. */
+
+        rclcpp::TimerBase::SharedPtr m_timer; /**< Shared pointer to manage a timer. */
+
+        rclcpp::Service<celestial_turtle_interface::srv::KillTurtle>::SharedPtr m_killTurtleServer; /**< Shared pointer to manage a service for killing turtles. */
+
+        std::vector<std::thread> m_spawnThreads; /**< Stores threads responsible for spawning turtles. */
+
+        std::vector<celestial_turtle_interface::msg::Turtle> m_turtleSpawned; /**< Stores information about turtles that have been spawned. */
+
+        rclcpp::Publisher<celestial_turtle_interface::msg::Turtles>::SharedPtr m_aliveTurtlePublisher; /**< Shared pointer to publish information about alive turtles. */
+
+        bool m_playByLevel{false}; /**< Indicates whether the game is set to be played by levels (true) or not (false). */
+        
+        std::size_t m_maxTurtles{1}; /**< Specifies the maximum number of turtles that can be spawned. */
+
+        celestial_turtle_interface::msg::Turtles m_aliveTurtles; /**< Stores information about the currently alive turtles. */
+
+        rclcpp::Subscription<std_msgs::msg::Bool>::SharedPtr m_shutdownRequestSubscriber; /**< Shared pointer to subscribe to shutdown requests. */
     };
 
 } /* namespace celestial_turtle_spawner */
