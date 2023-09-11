@@ -7,8 +7,8 @@
 #include "celestial_turtle_interface/msg/turtles.hpp"
 #include "celestial_turtle_interface/msg/turtle.hpp"
 #include "turtlesim/msg/pose.hpp"
-#include "unordered_map"
 #include "celestial_turtle_lib/utils.hpp"
+#include "celestial_turtle_interface/srv/catch_turtle.hpp"
 
 namespace celestial_turtle_controller
 {
@@ -18,20 +18,17 @@ namespace celestial_turtle_controller
         TurtleController();
 
     private:
+        void killTurtle(const std::string &turtleName);
+        void hunterPoseCallback(const turtlesim::msg::Pose::SharedPtr pose);
+        void processTurtlePose(const celestial_turtle_interface::msg::Turtle &turtle, const turtlesim::msg::Pose::SharedPtr pose_msg);
+        void callbackAliveTurtles(const celestial_turtle_interface::msg::Turtles::SharedPtr alive_turtles);
         rclcpp::Publisher<std_msgs::msg::Bool>::SharedPtr m_stopNode;
         std::vector<celestial_turtle_interface::msg::Turtle> m_aliveTurtles;
-        std::vector<celestial_turtle_interface::msg::Turtle> m_prevAliveTurtles;
-        std::vector<rclcpp::Subscription<turtlesim::msg::Pose>::SharedPtr> m_poseSubscribers;
-        celestial_turtle_interface::msg::Turtles stillAliveTurtle;
-        rclcpp::Publisher<celestial_turtle_interface::msg::Turtles>::SharedPtr m_aliveTurtlePublisher;
-        void guardianTurtlePoseCallback(const turtlesim::msg::Pose::SharedPtr pose);
-        turtlesim::msg::Pose::SharedPtr m_guardianTurtlePose;
-        rclcpp::Subscription<turtlesim::msg::Pose>::SharedPtr m_guardianTurtlePoseSubscriber;
-        rclcpp::Subscription<turtlesim::msg::Pose>::SharedPtr m_poseSubscriber;
-        void processTurtlePose(const celestial_turtle_interface::msg::Turtle &turtle, const turtlesim::msg::Pose::SharedPtr pose_msg);
-        std::unordered_map<std::string, rclcpp::Subscription<turtlesim::msg::Pose>> m_aliveTurtleSubscribers;
-        void callbackAliveTurtles(const celestial_turtle_interface::msg::Turtles::SharedPtr alive_turtles);
-        rclcpp::Subscription<celestial_turtle_interface::msg::Turtles>::SharedPtr m_aliveTurleSubscriber; 
+        std::vector<rclcpp::Subscription<turtlesim::msg::Pose>::SharedPtr> m_turtlePoseSubscribers;
+        std::vector<std::thread> m_killThreads;
+        turtlesim::msg::Pose::SharedPtr m_hunterPose;
+        rclcpp::Subscription<turtlesim::msg::Pose>::SharedPtr m_hunterPoseSubscriber;
+        rclcpp::Subscription<celestial_turtle_interface::msg::Turtles>::SharedPtr m_aliveTurleSubscriber;
     };
 
 } /* namespace celestial_turtle_controller */

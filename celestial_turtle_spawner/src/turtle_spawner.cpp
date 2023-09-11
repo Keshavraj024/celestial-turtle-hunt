@@ -8,7 +8,9 @@ namespace celestial_turtle_spawner
         m_maxTurtles = this->get_parameter("max_turtles").as_int();
         m_timer = this->create_wall_timer(std::chrono::seconds(3), std::bind(&TurtleSpawner::TimerCallBack, this));
         m_aliveTurtlePublisher = this->create_publisher<celestial_turtle_interface::msg::Turtles>("alive_turtles", 10);
-        m_aliveTurtlePublishertimer = this->create_wall_timer(std::chrono::seconds(1), std::bind(&TurtleSpawner::PublishAliveTurtles, this));
+        // m_aliveTurtlePublishertimer = this->create_wall_timer(std::chrono::seconds(1), std::bind(&TurtleSpawner::PublishAliveTurtles, this));
+        m_killTurtleServer = this->create_service<celestial_turtle_interface::srv::CatchTurtle>("kill_turtle",
+                                                                                                std::bind(&TurtleSpawner::killTurtleCallback, this, std::placeholders::_1, std::placeholders::_2));
         m_stopNodeSubscriber = this->create_subscription<std_msgs::msg::Bool>("kill_nodes",
                                                                               10, std::bind(&TurtleSpawner::callbackKillNode, this, std::placeholders::_1));
     }
@@ -16,8 +18,23 @@ namespace celestial_turtle_spawner
     {
         if (shouldTerminate->data)
         {
-            RCLCPP_WARN(this->get_logger(), "Shut");
             rclcpp::shutdown();
+        }
+    }
+
+    void TurtleSpawner::killTurtleCallback(const celestial_turtle_interface::srv::CatchTurtle::Request::SharedPtr &request,
+                                           const celestial_turtle_interface::srv::CatchTurtle::Response::SharedPtr &response)
+    {
+        m_killThreads.push_back(std::thread(celestial_turtle_lib::killTurtle, this, request->name));
+        response->success = true;
+        auto it = std::find_if(m_aliveTurtles.begin(), m_aliveTurtles.end(), [&request](const celestial_turtle_interface::msg::Turtle &turtle)
+                               { return turtle.name == request->name; });
+
+        // If the element is found, erase it from the vector
+        if (it != m_aliveTurtles.end())
+        {
+            m_aliveTurtles.erase(it);
+            PublishAliveTurtles();
         }
     }
 
@@ -63,6 +80,7 @@ namespace celestial_turtle_spawner
             turtle.name = response->name;
             m_aliveTurtles.push_back(turtle);
             celestial_turtle_lib::offTrailLine(this, turtle.name);
+            PublishAliveTurtles();
         }
         catch (const std::exception &e)
         {
