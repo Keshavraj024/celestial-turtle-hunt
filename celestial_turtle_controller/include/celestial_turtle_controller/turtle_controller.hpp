@@ -8,7 +8,7 @@
 #include "celestial_turtle_interface/msg/turtle.hpp"
 #include "turtlesim/msg/pose.hpp"
 #include "celestial_turtle_lib/utils.hpp"
-#include "celestial_turtle_interface/srv/catch_turtle.hpp"
+#include "celestial_turtle_interface/srv/kill_turtle.hpp"
 
 namespace celestial_turtle_controller
 {

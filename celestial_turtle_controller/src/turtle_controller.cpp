@@ -55,20 +55,20 @@ namespace celestial_turtle_controller
         }
         else if (std::abs(pose_msg->y - m_hunterPose->y) <= 1.0 && std::abs(pose_msg->x - m_hunterPose->x) <= 1.0)
         {
-            auto client = this->create_client<celestial_turtle_interface::srv::CatchTurtle>("kill_turtle");
+            auto client = this->create_client<celestial_turtle_interface::srv::KillTurtle>("kill_turtle");
             m_killThreads.push_back(std::thread(std::bind(&TurtleController::killTurtle, this, turtle.name)));
         }
     }
 
     void TurtleController::killTurtle(const std::string &turtleName)
     {
-        auto client = this->create_client<celestial_turtle_interface::srv::CatchTurtle>("kill_turtle");
+        auto client = this->create_client<celestial_turtle_interface::srv::KillTurtle>("kill_turtle");
         while (!client->wait_for_service(std::chrono::seconds(1)))
         {
             RCLCPP_WARN(this->get_logger(), "Waiting for service server to be up!!");
         }
 
-        auto request = std::make_shared<celestial_turtle_interface::srv::CatchTurtle::Request>();
+        auto request = std::make_shared<celestial_turtle_interface::srv::KillTurtle::Request>();
         request->name = turtleName;
 
         auto future = client->async_send_request(request);

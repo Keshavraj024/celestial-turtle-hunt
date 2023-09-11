@@ -8,7 +8,7 @@
 #include "rclcpp/rclcpp.hpp"
 #include "celestial_turtle_interface/msg/turtles.hpp"
 #include "celestial_turtle_interface/msg/turtle.hpp"
-#include "celestial_turtle_interface/srv/catch_turtle.hpp"
+#include "celestial_turtle_interface/srv/kill_turtle.hpp"
 #include "turtlesim/srv/spawn.hpp"
 #include "celestial_turtle_lib/utils.hpp"
 #include "std_msgs/msg/bool.hpp"
@@ -33,12 +33,12 @@ namespace celestial_turtle_spawner
          */
         void PublishAliveTurtles();
 
-        void killTurtleCallback(const celestial_turtle_interface::srv::CatchTurtle::Request::SharedPtr &request,
-                                 const celestial_turtle_interface::srv::CatchTurtle::Response::SharedPtr &response);
+        void killTurtleCallback(const celestial_turtle_interface::srv::KillTurtle::Request::SharedPtr &request,
+                                 const celestial_turtle_interface::srv::KillTurtle::Response::SharedPtr &response);
 
         std::vector<std::thread> m_killThreads;
         rclcpp::TimerBase::SharedPtr m_timer;  
-        rclcpp::Service<celestial_turtle_interface::srv::CatchTurtle>::SharedPtr m_killTurtleServer;                                                        /**< Calls the spawn turtle service*/
+        rclcpp::Service<celestial_turtle_interface::srv::KillTurtle>::SharedPtr m_killTurtleServer;                                                        /**< Calls the spawn turtle service*/
         std::vector<std::thread> m_spawnThreads;                                                       /**< Threads calling spawn turtle service*/
         std::vector<celestial_turtle_interface::msg::Turtle> m_aliveTurtles;                           /**< List of alive turtles*/
         rclcpp::Publisher<celestial_turtle_interface::msg::Turtles>::SharedPtr m_aliveTurtlePublisher; /**< Publishes the alive turtles information*/
