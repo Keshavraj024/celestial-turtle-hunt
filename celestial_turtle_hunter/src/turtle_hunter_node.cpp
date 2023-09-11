@@ -1,9 +1,9 @@
-#include "turtle_guardian/turtle_guardian.hpp"
+#include "celestial_turtle_hunter/turtle_hunter.hpp"
 
 int main(int argc, char **argv)
 {
     rclcpp::init(argc, argv);
-    auto node = std::make_shared<TurtleGuardian>();
+    auto node = std::make_shared<TurtleHunter>();
     rclcpp::spin(node);
     rclcpp::shutdown();
     return 0;

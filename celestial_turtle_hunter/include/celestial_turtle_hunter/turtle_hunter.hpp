@@ -1,5 +1,5 @@
-#ifndef __TURTLE_GUARDIAN_H__
-#define __TURTLE_GURADIAN_H__
+#ifndef _CELESTIAL_TURTLE_HUNTER_H_
+#define _CELESTIAL_TURTLE_HUNTER_H_
 
 #include "rclcpp/rclcpp.hpp"
 #include "turtlesim/srv/kill.hpp"
@@ -7,20 +7,18 @@
 #include "turtlesim/srv/set_pen.hpp"
 #include "celestial_turtle_lib/utils.hpp"
 
-class TurtleGuardian : public rclcpp::Node
+class TurtleHunter : public rclcpp::Node
 {
 public:
-    TurtleGuardian();
+    TurtleHunter();
 
 private:
-    void killTurtle(const std::string &turlteName);
     void spawnTurle();
     std::thread m_killThread;
     std::thread m_spawnThread;
     double m_spawnPositionX;
     double m_spawnPositionY;
     double m_spawnOrientation;
-    
 };
 
 #endif

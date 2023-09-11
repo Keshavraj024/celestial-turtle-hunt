@@ -1,7 +1,7 @@
-#include "turtle_guardian/turtle_guardian.hpp"
+#include "celestial_turtle_hunter/turtle_hunter.hpp"
 #include "chrono"
 
-TurtleGuardian::TurtleGuardian() : Node("turtle_guardian_node")
+TurtleHunter::TurtleHunter() : Node("turtle_hunter_node")
 {
     this->declare_parameter("spawn_position_x", 0.0);
     this->declare_parameter("spawn_position_y", 0.0);
@@ -10,11 +10,11 @@ TurtleGuardian::TurtleGuardian() : Node("turtle_guardian_node")
     m_spawnPositionX = this->get_parameter("spawn_position_x").as_double();
     m_spawnPositionY = this->get_parameter("spawn_position_y").as_double();
     m_spawnOrientation = this->get_parameter("spawn_orientation").as_double();
-    m_spawnThread = std::thread(std::bind(&TurtleGuardian::spawnTurle, this));
+    m_spawnThread = std::thread(std::bind(&TurtleHunter::spawnTurle, this));
 }
 
 
-void TurtleGuardian::spawnTurle()
+void TurtleHunter::spawnTurle()
 {
     celestial_turtle_lib::killTurtle(this,"turtle1");
     auto client = this->create_client<turtlesim::srv::Spawn>("spawn");
@@ -26,7 +26,7 @@ void TurtleGuardian::spawnTurle()
     request->x = m_spawnPositionX;
     request->y = m_spawnPositionY;
     request->theta = m_spawnOrientation;
-    request->name = "TurtleGuardian";
+    request->name = "turtleHunter";
 
     auto result = client->async_send_request(request);
     try

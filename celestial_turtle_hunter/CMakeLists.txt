@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
-project(turtle_guardian)
+project(celestial_turtle_hunter)
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
@@ -16,12 +16,12 @@ install(DIRECTORY
         DESTINATION share/${PROJECT_NAME})
 
 
-add_executable(turtle_guardian_node src/turtle_guardian_node.cpp src/turtle_guardian.cpp)
-target_include_directories(turtle_guardian_node PRIVATE include)
-ament_target_dependencies(turtle_guardian_node rclcpp turtlesim celestial_turtle_lib)
+add_executable(turtle_hunter_node src/turtle_hunter_node.cpp src/turtle_hunter.cpp)
+target_include_directories(turtle_hunter_node PRIVATE include)
+ament_target_dependencies(turtle_hunter_node rclcpp turtlesim celestial_turtle_lib)
 
 install(TARGETS
-        turtle_guardian_node
+        turtle_hunter_node
         DESTINATION lib/${PROJECT_NAME})
 
 ament_package()

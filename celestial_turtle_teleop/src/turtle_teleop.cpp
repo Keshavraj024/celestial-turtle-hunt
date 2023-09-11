@@ -4,8 +4,8 @@ TurtleTeleop::TurtleTeleop() : Node("turtle_teleop_node")
 {
     this->declare_parameter("linear_velocity", 1.0);
     m_linearVel = this->get_parameter("linear_velocity").as_double();
-    m_cmdVelPublisher = this->create_publisher<geometry_msgs::msg::Twist>("/TurtleGuardian/cmd_vel", 10);
-    m_turtlePoseSubscriber = this->create_subscription<turtlesim::msg::Pose>("/TurtleGuardian/pose", 10,
+    m_cmdVelPublisher = this->create_publisher<geometry_msgs::msg::Twist>("/turtleHunter/cmd_vel", 10);
+    m_turtlePoseSubscriber = this->create_subscription<turtlesim::msg::Pose>("/turtleHunter/pose", 10,
                                                                              std::bind(&TurtleTeleop::poseCallback, this, std::placeholders::_1));
     m_moveThread = std::thread(std::bind(&TurtleTeleop::moveTurtle, this));
 }

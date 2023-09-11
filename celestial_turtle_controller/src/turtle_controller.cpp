@@ -9,7 +9,7 @@ namespace celestial_turtle_controller
         m_aliveTurleSubscriber = this->create_subscription<celestial_turtle_interface::msg::Turtles>("alive_turtles",
                                                                                                      10, std::bind(&TurtleController::callbackAliveTurtles, this, std::placeholders::_1));
 
-        m_guardianTurtlePoseSubscriber = this->create_subscription<turtlesim::msg::Pose>("/TurtleGuardian/pose",
+        m_guardianTurtlePoseSubscriber = this->create_subscription<turtlesim::msg::Pose>("/turtleHunter/pose",
                                                                                          10, std::bind(&TurtleController::guardianTurtlePoseCallback, this, std::placeholders::_1));
     }
 
