@@ -43,7 +43,6 @@ namespace celestial_turtle_spawner
         std::vector<celestial_turtle_interface::msg::Turtle> m_aliveTurtles;                           /**< List of alive turtles*/
         rclcpp::Publisher<celestial_turtle_interface::msg::Turtles>::SharedPtr m_aliveTurtlePublisher; /**< Publishes the alive turtles information*/
         std::size_t m_maxTurtles{1};
-        rclcpp::TimerBase::SharedPtr m_aliveTurtlePublishertimer;
         celestial_turtle_interface::msg::Turtles m_aliveTurtle;
         rclcpp::Subscription<std_msgs::msg::Bool>::SharedPtr m_stopNodeSubscriber;
     };
