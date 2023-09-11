@@ -1,5 +1,0 @@
-<launch>
-    <node pkg="turtle_guardian" exec="turtle_guardian_navigator_node" output="screen">
-        <param name="linear_velocity" value="1.0"/>
-    </node>
-</launch>

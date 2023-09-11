@@ -1,5 +1,5 @@
-#ifndef _TURTLE_GUARDIAN_NAVIGATOR_H_
-#define _TURTLE_GUARDIAN_NAVIGATOR_H_
+#ifndef _TURTLE_TELEOP_H_
+#define _TURTLE_TELEOP_H_
 
 #include "rclcpp/rclcpp.hpp"
 #include <iostream>
@@ -9,10 +9,10 @@
 #include "geometry_msgs/msg/twist.hpp"
 #include "turtlesim/msg/pose.hpp"
 
-class TurtleGuardianNavigator : public rclcpp::Node
+class TurtleTeleop : public rclcpp::Node
 {
 public:
-    TurtleGuardianNavigator();
+    TurtleTeleop();
 
 private:
     void moveTurtle();

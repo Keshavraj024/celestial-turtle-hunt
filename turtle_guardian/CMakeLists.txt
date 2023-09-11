@@ -9,7 +9,6 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(turtlesim REQUIRED)
-find_package(geometry_msgs REQUIRED)
 find_package(celestial_turtle_lib REQUIRED)
 
 install(DIRECTORY
@@ -21,13 +20,8 @@ add_executable(turtle_guardian_node src/turtle_guardian_node.cpp src/turtle_guar
 target_include_directories(turtle_guardian_node PRIVATE include)
 ament_target_dependencies(turtle_guardian_node rclcpp turtlesim celestial_turtle_lib)
 
-add_executable(turtle_guardian_navigator_node src/turtle_guardian_navigator.cpp )
-target_include_directories(turtle_guardian_navigator_node PRIVATE include)
-ament_target_dependencies(turtle_guardian_navigator_node rclcpp turtlesim geometry_msgs)
-
 install(TARGETS
         turtle_guardian_node
-        turtle_guardian_navigator_node
         DESTINATION lib/${PROJECT_NAME})
 
 ament_package()

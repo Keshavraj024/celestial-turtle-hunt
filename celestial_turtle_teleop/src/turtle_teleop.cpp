@@ -1,21 +1,21 @@
-#include "turtle_guardian/turtle_guardian_navigator.hpp"
+#include "celestial_turtle_teleop/turtle_teleop.hpp"
 
-TurtleGuardianNavigator::TurtleGuardianNavigator() : Node("turtle_guardian_navigator_node")
+TurtleTeleop::TurtleTeleop() : Node("turtle_teleop_node")
 {
     this->declare_parameter("linear_velocity", 1.0);
     m_linearVel = this->get_parameter("linear_velocity").as_double();
     m_cmdVelPublisher = this->create_publisher<geometry_msgs::msg::Twist>("/TurtleGuardian/cmd_vel", 10);
     m_turtlePoseSubscriber = this->create_subscription<turtlesim::msg::Pose>("/TurtleGuardian/pose", 10,
-                                                                             std::bind(&TurtleGuardianNavigator::poseCallback, this, std::placeholders::_1));
-    m_moveThread = std::thread(std::bind(&TurtleGuardianNavigator::moveTurtle, this));
+                                                                             std::bind(&TurtleTeleop::poseCallback, this, std::placeholders::_1));
+    m_moveThread = std::thread(std::bind(&TurtleTeleop::moveTurtle, this));
 }
 
-void TurtleGuardianNavigator::poseCallback(const turtlesim::msg::Pose::SharedPtr poseMsg)
+void TurtleTeleop::poseCallback(const turtlesim::msg::Pose::SharedPtr poseMsg)
 {
     m_pose = poseMsg;
 }
 
-void TurtleGuardianNavigator::moveTurtle()
+void TurtleTeleop::moveTurtle()
 {
     struct termios oldt, newt;
     char ch[3]; // Buffer to store escape sequence
@@ -58,13 +58,12 @@ void TurtleGuardianNavigator::moveTurtle()
 
     tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
     rclcpp::shutdown();
-    
 }
 
 int main(int argc, char **argv)
 {
     rclcpp::init(argc, argv);
-    auto node = std::make_shared<TurtleGuardianNavigator>();
+    auto node = std::make_shared<TurtleTeleop>();
     rclcpp::spin(node);
     rclcpp::shutdown();
     return 0;
