@@ -14,7 +14,6 @@ namespace celestial_turtle_spawner
     {
         if (shouldTerminate->data)
         {
-             RCLCPP_WARN(this->get_logger(), "Shut");
             rclcpp::shutdown();
         }
     }

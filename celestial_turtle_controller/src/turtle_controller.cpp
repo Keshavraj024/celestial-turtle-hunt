@@ -41,13 +41,9 @@ namespace celestial_turtle_controller
 
     void TurtleController::processTurtlePose(const celestial_turtle_interface::msg::Turtle &turtle, const turtlesim::msg::Pose::SharedPtr pose_msg)
     {
-        // RCLCPP_INFO(get_logger(), "Turtle name: %s", turtle.name.c_str());
-        // RCLCPP_INFO(get_logger(), "Turtle Pose Y: %.2f", std::abs(pose_msg->y - m_hunterPose->y));
-        // RCLCPP_INFO(get_logger(), "Turtle Pose X: %.2f", std::abs(pose_msg->x - m_hunterPose->x));
-
         if (pose_msg->y <= 0)
         {
-            RCLCPP_INFO(get_logger(), "%s reached the ground. Terminating the Game", turtle.name.c_str());
+            RCLCPP_INFO(get_logger(), "%s reached the ground. !!!Terminating the Game!!!", turtle.name.c_str());
             std_msgs::msg::Bool killMsg;
             killMsg.data = true;
             m_shutdownRequest->publish(killMsg);
