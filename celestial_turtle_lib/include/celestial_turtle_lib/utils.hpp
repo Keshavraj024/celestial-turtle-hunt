@@ -1,11 +1,11 @@
-#ifndef CELESTIAL_TURTLE_LIB__UTILS_HPP_
-#define CELESTIAL_TURTLE_LIB__UTILS_HPP_
-#include <iostream>
+#ifndef _CELESTIAL_TURTLE_LIB__UTILS_HPP_
+#define _CELESTIAL_TURTLE_LIB__UTILS_HPP_
+
 #include <random>
-#include "turtlesim/srv/set_pen.hpp"
-#include "turtlesim/srv/kill.hpp"
 #include "chrono"
 #include "rclcpp/rclcpp.hpp"
+#include "turtlesim/srv/set_pen.hpp"
+#include "turtlesim/srv/kill.hpp"
 
 namespace celestial_turtle_lib
 {
