@@ -21,36 +21,38 @@ namespace celestial_turtle_controller
     void TurtleController::callbackAliveTurtles(const celestial_turtle_interface::msg::Turtles::SharedPtr alive_turtles)
     {
         m_aliveTurtles = alive_turtles->turtles;
-        if (m_aliveTurtles.empty())
+        if (m_aliveTurtles.empty() || m_aliveTurtles == m_prevAliveTurtles)
         {
             return;
         }
-        turtlesim::msg::Pose poseMsg;
+        std::vector<rclcpp::Subscription<turtlesim::msg::Pose>::SharedPtr> poseSubscribers;
         for (const auto &turtle : m_aliveTurtles)
         {
             std::string topic_name = "/" + turtle.name + "/pose";
 
             // Create a subscription for each turtle's pose
-            m_poseSubscriber = create_subscription<turtlesim::msg::Pose>(
+            auto poseSubscriber = create_subscription<turtlesim::msg::Pose>(
                 topic_name, 10, [this, turtle](const turtlesim::msg::Pose::SharedPtr pose_msg)
                 { processTurtlePose(turtle, pose_msg); });
+            poseSubscribers.push_back(poseSubscriber);
         }
+        m_poseSubscribers = poseSubscribers;
+        m_prevAliveTurtles = m_aliveTurtles;
     }
 
     void TurtleController::processTurtlePose(const celestial_turtle_interface::msg::Turtle &turtle, const turtlesim::msg::Pose::SharedPtr pose_msg)
     {
-        RCLCPP_INFO(get_logger(), "Turtle name: %s", turtle.name.c_str());
-        RCLCPP_INFO(get_logger(), "Turtle Pose Y: %.2f", std::abs(pose_msg->y - m_guardianTurtlePose->y));
-        RCLCPP_INFO(get_logger(), "Turtle Pose X: %.2f", std::abs(pose_msg->x - m_guardianTurtlePose->x));
+        // RCLCPP_INFO(get_logger(), "Turtle name: %s", turtle.name.c_str());
+        // RCLCPP_INFO(get_logger(), "Turtle Pose Y: %.2f", std::abs(pose_msg->y - m_guardianTurtlePose->y));
+        // RCLCPP_INFO(get_logger(), "Turtle Pose X: %.2f", std::abs(pose_msg->x - m_guardianTurtlePose->x));
 
         if (pose_msg->y <= 0)
         {
-            RCLCPP_INFO(get_logger(), "Turtle %s reached the ground", turtle.name.c_str());
+            RCLCPP_INFO(get_logger(), "Turtle %s reached the ground. Terminating the Game", turtle.name.c_str());
             rclcpp::shutdown();
         }
         else if (std::abs(pose_msg->y - m_guardianTurtlePose->y) <= 1.0 && std::abs(pose_msg->x - m_guardianTurtlePose->x) <= 1.0)
         {
-            RCLCPP_INFO(get_logger(), "Kill the turtle");
             celestial_turtle_lib::killTurtle(this, turtle.name);
             auto turtleToRemove = std::remove_if(m_aliveTurtles.begin(), m_aliveTurtles.end(), [turtle](const auto &turtleElement)
                                                  { return turtleElement.name == turtle.name; });

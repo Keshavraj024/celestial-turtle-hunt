@@ -22,6 +22,8 @@ namespace celestial_turtle_controller
 
     private:
         std::vector<celestial_turtle_interface::msg::Turtle> m_aliveTurtles;
+        std::vector<celestial_turtle_interface::msg::Turtle> m_prevAliveTurtles;
+        std::vector<rclcpp::Subscription<turtlesim::msg::Pose>::SharedPtr> m_poseSubscribers;
         celestial_turtle_interface::msg::Turtles stillAliveTurtle;
         rclcpp::Publisher<celestial_turtle_interface::msg::Turtles>::SharedPtr m_aliveTurtlePublisher;
         void guardianTurtlePoseCallback(const turtlesim::msg::Pose::SharedPtr pose);

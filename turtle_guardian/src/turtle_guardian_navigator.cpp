@@ -2,7 +2,7 @@
 
 TurtleGuardianNavigator::TurtleGuardianNavigator() : Node("turtle_guardian_navigator_node")
 {
-    this->declare_parameter("linear_velocity", 0.0);
+    this->declare_parameter("linear_velocity", 1.0);
     m_linearVel = this->get_parameter("linear_velocity").as_double();
     m_cmdVelPublisher = this->create_publisher<geometry_msgs::msg::Twist>("/TurtleGuardian/cmd_vel", 10);
     m_turtlePoseSubscriber = this->create_subscription<turtlesim::msg::Pose>("/TurtleGuardian/pose", 10,

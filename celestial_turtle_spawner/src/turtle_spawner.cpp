@@ -7,7 +7,7 @@ namespace celestial_turtle_spawner
     {
         this->declare_parameter("max_turtles", 1);
         m_maxTurtles = this->get_parameter("max_turtles").as_int();
-        m_timer = this->create_wall_timer(std::chrono::seconds(5), std::bind(&TurtleSpawner::TimerCallBack, this));
+        m_timer = this->create_wall_timer(std::chrono::seconds(3), std::bind(&TurtleSpawner::TimerCallBack, this));
         m_aliveTurtlePublisher = this->create_publisher<celestial_turtle_interface::msg::Turtles>("alive_turtles", 10);
         m_aliveTurtlePublishertimer = this->create_wall_timer(std::chrono::seconds(1), std::bind(&TurtleSpawner::PublishAliveTurtles, this));
     }
@@ -54,7 +54,6 @@ namespace celestial_turtle_spawner
             turtle.name = response->name;
             m_aliveTurtles.push_back(turtle);
             celestial_turtle_lib::offTrailLine(this, turtle.name);
-            // PublishAliveTurtles();
         }
         catch (const std::exception &e)
         {
