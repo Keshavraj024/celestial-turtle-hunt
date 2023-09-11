@@ -18,9 +18,8 @@ void TurtleTeleop::poseCallback(const turtlesim::msg::Pose::SharedPtr poseMsg)
 void TurtleTeleop::moveTurtle()
 {
     struct termios oldt, newt;
-    char ch[3]; // Buffer to store escape sequence
+    char ch[3]; 
 
-    // Disable buffering for stdin
     tcgetattr(STDIN_FILENO, &oldt);
     newt = oldt;
     newt.c_lflag &= ~(ICANON | ECHO);
