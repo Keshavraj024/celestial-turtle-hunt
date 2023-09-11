@@ -10,10 +10,10 @@ namespace celestial_turtle_spawner
         m_aliveTurtlePublisher = this->create_publisher<celestial_turtle_interface::msg::Turtles>("alive_turtles", 10);
         m_killTurtleServer = this->create_service<celestial_turtle_interface::srv::KillTurtle>("kill_turtle",
                                                                                                std::bind(&TurtleSpawner::killTurtleCallback, this, std::placeholders::_1, std::placeholders::_2));
-        m_stopNodeSubscriber = this->create_subscription<std_msgs::msg::Bool>("kill_nodes",
-                                                                              10, std::bind(&TurtleSpawner::callbackKillNode, this, std::placeholders::_1));
+        m_shutdownRequestSubscriber = this->create_subscription<std_msgs::msg::Bool>("kill_nodes",
+                                                                              10, std::bind(&TurtleSpawner::shutdownRequestCallback, this, std::placeholders::_1));
     }
-    void TurtleSpawner::callbackKillNode(const std_msgs::msg::Bool::SharedPtr shouldTerminate)
+    void TurtleSpawner::shutdownRequestCallback(const std_msgs::msg::Bool::SharedPtr shouldTerminate)
     {
         if (shouldTerminate->data)
         {

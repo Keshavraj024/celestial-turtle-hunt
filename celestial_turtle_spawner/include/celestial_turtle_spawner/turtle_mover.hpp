@@ -20,7 +20,7 @@ namespace celestial_turtle_spawner
         TurtleMover();
 
     private:
-        void callbackKillNode(const std_msgs::msg::Bool::SharedPtr shouldTerminate);
+        void shutdownRequestCallback(const std_msgs::msg::Bool::SharedPtr shouldTerminate);
         void TimerCallBack();
 
         /**
@@ -33,7 +33,7 @@ namespace celestial_turtle_spawner
         rclcpp::TimerBase::SharedPtr m_timer;                                                              /**< Send the velocity command*/
         rclcpp::Subscription<celestial_turtle_interface::msg::Turtles>::SharedPtr m_aliveTurleSubscriber;  /**< Subscribes to the alive turtles information*/
         std::map<std::string, rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr> m_cmdVelPublishers; /**< Publishes the command veloctiy */
-        rclcpp::Subscription<std_msgs::msg::Bool>::SharedPtr m_stopNodeSubscriber;
+        rclcpp::Subscription<std_msgs::msg::Bool>::SharedPtr m_shutdownRequestSubscriber;
     };
 
 } /* namespace celestial_turtle_spawner */

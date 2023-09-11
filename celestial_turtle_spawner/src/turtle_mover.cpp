@@ -7,10 +7,10 @@ namespace celestial_turtle_spawner
         m_aliveTurleSubscriber = this->create_subscription<celestial_turtle_interface::msg::Turtles>("alive_turtles",
                                                                                                      10, std::bind(&TurtleMover::CallbackAliveTurtles, this, std::placeholders::_1));
         m_timer = this->create_wall_timer(std::chrono::milliseconds(500), std::bind(&TurtleMover::TimerCallBack, this));
-        m_stopNodeSubscriber = this->create_subscription<std_msgs::msg::Bool>("kill_nodes",
-                                                                              10, std::bind(&TurtleMover::callbackKillNode, this, std::placeholders::_1));
+        m_shutdownRequestSubscriber = this->create_subscription<std_msgs::msg::Bool>("kill_nodes",
+                                                                              10, std::bind(&TurtleMover::shutdownRequestCallback, this, std::placeholders::_1));
     }
-    void TurtleMover::callbackKillNode(const std_msgs::msg::Bool::SharedPtr shouldTerminate)
+    void TurtleMover::shutdownRequestCallback(const std_msgs::msg::Bool::SharedPtr shouldTerminate)
     {
         if (shouldTerminate->data)
         {

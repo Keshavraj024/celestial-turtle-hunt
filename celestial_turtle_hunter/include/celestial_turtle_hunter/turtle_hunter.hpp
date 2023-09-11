@@ -14,13 +14,13 @@ public:
 
 private:
     void spawnTurle();
-    void callbackKillNode(const std_msgs::msg::Bool::SharedPtr shouldTerminate);
+    void shutdownRequestCallback(const std_msgs::msg::Bool::SharedPtr shouldTerminate);
     std::thread m_killThread;
     std::thread m_spawnThread;
     double m_spawnPositionX;
     double m_spawnPositionY;
     double m_spawnOrientation;
-    rclcpp::Subscription<std_msgs::msg::Bool>::SharedPtr m_stopNodeSubscriber;
+    rclcpp::Subscription<std_msgs::msg::Bool>::SharedPtr m_shutdownRequestSubscriber;
 };
 
 #endif

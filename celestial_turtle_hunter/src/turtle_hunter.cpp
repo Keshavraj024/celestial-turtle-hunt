@@ -12,11 +12,11 @@ TurtleHunter::TurtleHunter() : Node("turtle_hunter_node")
     m_spawnOrientation = this->get_parameter("spawn_orientation").as_double();
     m_spawnThread = std::thread(std::bind(&TurtleHunter::spawnTurle, this));
 
-    m_stopNodeSubscriber = this->create_subscription<std_msgs::msg::Bool>("kill_nodes",
-                                                                          10, std::bind(&TurtleHunter::callbackKillNode, this, std::placeholders::_1));
+    m_shutdownRequestSubscriber = this->create_subscription<std_msgs::msg::Bool>("kill_nodes",
+                                                                          10, std::bind(&TurtleHunter::shutdownRequestCallback, this, std::placeholders::_1));
 }
 
-void TurtleHunter::callbackKillNode(const std_msgs::msg::Bool::SharedPtr shouldTerminate)
+void TurtleHunter::shutdownRequestCallback(const std_msgs::msg::Bool::SharedPtr shouldTerminate)
 {
     if (shouldTerminate->data)
     {

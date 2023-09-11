@@ -32,7 +32,7 @@ namespace celestial_turtle_spawner
          * @brief Callback to handle turtle termination requests.
          * @param shouldTerminate A boolean message indicating whether to terminate turtles.
          */
-        void callbackKillNode(const std_msgs::msg::Bool::SharedPtr shouldTerminate);
+        void shutdownRequestCallback(const std_msgs::msg::Bool::SharedPtr shouldTerminate);
 
         /**
          * @brief Timer callback for periodic turtle spawning.
@@ -65,7 +65,7 @@ namespace celestial_turtle_spawner
         rclcpp::Publisher<celestial_turtle_interface::msg::Turtles>::SharedPtr m_aliveTurtlePublisher;
         std::size_t m_maxTurtles{1};
         celestial_turtle_interface::msg::Turtles m_aliveTurtles;
-        rclcpp::Subscription<std_msgs::msg::Bool>::SharedPtr m_stopNodeSubscriber;
+        rclcpp::Subscription<std_msgs::msg::Bool>::SharedPtr m_shutdownRequestSubscriber;
     };
 
 } /* namespace celestial_turtle_spawner */
