@@ -1,9 +1,9 @@
-#include "celestial_turtle_controller/celestial_controller.hpp"
+#include "celestial_turtle_controller/turtle_controller.hpp"
 #include "turtlesim/srv/kill.hpp"
 
 namespace celestial_turtle_controller
 {
-    TurtleController::TurtleController() : Node("turtle_controller")
+    TurtleController::TurtleController() : Node("turtle_controller_node")
     {
         m_aliveTurtlePublisher = this->create_publisher<celestial_turtle_interface::msg::Turtles>("alive_turtles", 10);
         m_aliveTurleSubscriber = this->create_subscription<celestial_turtle_interface::msg::Turtles>("alive_turtles",
@@ -48,7 +48,7 @@ namespace celestial_turtle_controller
 
         if (pose_msg->y <= 0)
         {
-            RCLCPP_INFO(get_logger(), "Turtle %s reached the ground. Terminating the Game", turtle.name.c_str());
+            RCLCPP_INFO(get_logger(), "%s reached the ground. Terminating the Game", turtle.name.c_str());
             rclcpp::shutdown();
         }
         else if (std::abs(pose_msg->y - m_guardianTurtlePose->y) <= 1.0 && std::abs(pose_msg->x - m_guardianTurtlePose->x) <= 1.0)
