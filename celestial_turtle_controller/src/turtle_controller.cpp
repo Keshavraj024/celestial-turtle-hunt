@@ -5,7 +5,7 @@ namespace celestial_turtle_controller
 {
     TurtleController::TurtleController() : Node("turtle_controller_node")
     {
-        m_stopNode = this->create_publisher<std_msgs::msg::Bool>("kill_nodes", 10);
+        m_shutdownRequest = this->create_publisher<std_msgs::msg::Bool>("kill_nodes", 10);
         m_aliveTurleSubscriber = this->create_subscription<celestial_turtle_interface::msg::Turtles>("alive_turtles",
                                                                                                      10, std::bind(&TurtleController::callbackAliveTurtles, this, std::placeholders::_1));
 
@@ -50,7 +50,7 @@ namespace celestial_turtle_controller
             RCLCPP_INFO(get_logger(), "%s reached the ground. Terminating the Game", turtle.name.c_str());
             std_msgs::msg::Bool killMsg;
             killMsg.data = true;
-            m_stopNode->publish(killMsg);
+            m_shutdownRequest->publish(killMsg);
             rclcpp::shutdown();
         }
         else if (std::abs(pose_msg->y - m_hunterPose->y) <= 1.0 && std::abs(pose_msg->x - m_hunterPose->x) <= 1.0)
