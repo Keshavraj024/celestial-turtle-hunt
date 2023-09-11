@@ -8,6 +8,16 @@ TurtleTeleop::TurtleTeleop() : Node("turtle_teleop_node")
     m_turtlePoseSubscriber = this->create_subscription<turtlesim::msg::Pose>("/turtleHunter/pose", 10,
                                                                              std::bind(&TurtleTeleop::poseCallback, this, std::placeholders::_1));
     m_moveThread = std::thread(std::bind(&TurtleTeleop::moveTurtle, this));
+    m_shutdownRequestSubscriber = this->create_subscription<std_msgs::msg::Bool>("kill_nodes",
+                                                                                 10, std::bind(&TurtleTeleop::shutdownRequestCallback, this, std::placeholders::_1));
+}
+
+void TurtleTeleop::shutdownRequestCallback(const std_msgs::msg::Bool::SharedPtr shouldTerminate)
+{
+    if (shouldTerminate->data)
+    {
+        rclcpp::shutdown();
+    }
 }
 
 void TurtleTeleop::poseCallback(const turtlesim::msg::Pose::SharedPtr poseMsg)
@@ -18,7 +28,7 @@ void TurtleTeleop::poseCallback(const turtlesim::msg::Pose::SharedPtr poseMsg)
 void TurtleTeleop::moveTurtle()
 {
     struct termios oldt, newt;
-    char ch[3]; 
+    char ch[3];
 
     tcgetattr(STDIN_FILENO, &oldt);
     newt = oldt;
