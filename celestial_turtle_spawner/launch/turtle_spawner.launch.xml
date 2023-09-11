@@ -1,5 +1,7 @@
 <launch>
-    <node pkg="celestial_turtle_spawner" exec="turtle_mover"/>
+    <node pkg="celestial_turtle_spawner" exec="turtle_mover">
+        <param name="turtle_linear_velocity" value="1.0"/>
+    </node>
     <node pkg="celestial_turtle_spawner" exec="turtle_spawner">
         <param name="max_turtles" value="2"/>
         <param name="is_play_by_level" value="false"/>

@@ -4,6 +4,8 @@ namespace celestial_turtle_spawner
 {
     TurtleMover::TurtleMover() : Node("celestial_turtle_mover")
     {
+        this->declare_parameter("turtle_linear_velocity", 1.0);
+        m_turtleLinearVel = this->get_parameter("turtle_linear_velocity").as_double();
         m_aliveTurleSubscriber = this->create_subscription<celestial_turtle_interface::msg::Turtles>("alive_turtles",
                                                                                                      10, std::bind(&TurtleMover::CallbackAliveTurtles, this, std::placeholders::_1));
         m_timer = this->create_wall_timer(std::chrono::milliseconds(500), std::bind(&TurtleMover::TimerCallBack, this));
@@ -31,7 +33,7 @@ namespace celestial_turtle_spawner
             if (cmdVelPublisher)
             {
                 auto cmdVelocityMessage = geometry_msgs::msg::Twist();
-                cmdVelocityMessage.linear.x = 1.0;
+                cmdVelocityMessage.linear.x = m_turtleLinearVel;
                 cmdVelPublisher->publish(cmdVelocityMessage);
             }
         }

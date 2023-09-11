@@ -49,6 +49,7 @@ namespace celestial_turtle_spawner
         rclcpp::Subscription<celestial_turtle_interface::msg::Turtles>::SharedPtr m_aliveTurleSubscriber;  /**< Subscriber for alive turtles information */
         std::map<std::string, rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr> m_cmdVelPublishers; /**< Publishers for command velocity */
         rclcpp::Subscription<std_msgs::msg::Bool>::SharedPtr m_shutdownRequestSubscriber;                  /**< Subscriber for shutdown requests */
+        double m_turtleLinearVel;                                                                          /**< Linear Velocity of the turtles */
     };
 
 } /* namespace celestial_turtle_spawner */
