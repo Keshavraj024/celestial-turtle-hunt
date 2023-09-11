@@ -10,6 +10,8 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(turtlesim REQUIRED)
 find_package(celestial_turtle_lib REQUIRED)
+find_package(celestial_turtle_interface REQUIRED)
+find_package(std_msgs REQUIRED)
 
 install(DIRECTORY
         launch
@@ -18,7 +20,7 @@ install(DIRECTORY
 
 add_executable(turtle_hunter_node src/turtle_hunter_node.cpp src/turtle_hunter.cpp)
 target_include_directories(turtle_hunter_node PRIVATE include)
-ament_target_dependencies(turtle_hunter_node rclcpp turtlesim celestial_turtle_lib)
+ament_target_dependencies(turtle_hunter_node rclcpp turtlesim celestial_turtle_lib celestial_turtle_interface std_msgs)
 
 install(TARGETS
         turtle_hunter_node

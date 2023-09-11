@@ -10,6 +10,7 @@
 #include "celestial_turtle_interface/msg/turtle.hpp"
 #include "turtlesim/msg/pose.hpp"
 #include "geometry_msgs/msg/twist.hpp"
+#include "std_msgs/msg/bool.hpp"
 
 namespace celestial_turtle_spawner
 {
@@ -19,6 +20,7 @@ namespace celestial_turtle_spawner
         TurtleMover();
 
     private:
+        void callbackKillNode(const std_msgs::msg::Bool::SharedPtr shouldTerminate);
         void TimerCallBack();
 
         /**
@@ -31,6 +33,7 @@ namespace celestial_turtle_spawner
         rclcpp::TimerBase::SharedPtr m_timer;                                                              /**< Send the velocity command*/
         rclcpp::Subscription<celestial_turtle_interface::msg::Turtles>::SharedPtr m_aliveTurleSubscriber;  /**< Subscribes to the alive turtles information*/
         std::map<std::string, rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr> m_cmdVelPublishers; /**< Publishes the command veloctiy */
+        rclcpp::Subscription<std_msgs::msg::Bool>::SharedPtr m_stopNodeSubscriber;
     };
 
 } /* namespace celestial_turtle_spawner */

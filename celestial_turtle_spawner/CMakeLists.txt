@@ -12,13 +12,14 @@ find_package(turtlesim REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(celestial_turtle_interface REQUIRED)
 find_package(celestial_turtle_lib REQUIRED)
+find_package(std_msgs REQUIRED)
 
 add_executable(turtle_spawner 
   src/turtle_spawner.cpp
 )
 
 target_include_directories(turtle_spawner PRIVATE include )
-ament_target_dependencies(turtle_spawner rclcpp turtlesim celestial_turtle_interface celestial_turtle_lib)
+ament_target_dependencies(turtle_spawner rclcpp turtlesim celestial_turtle_interface celestial_turtle_lib std_msgs)
 
 
 add_executable(turtle_mover
@@ -26,7 +27,7 @@ add_executable(turtle_mover
 )
 
 target_include_directories(turtle_mover PRIVATE include)
-ament_target_dependencies(turtle_mover rclcpp turtlesim celestial_turtle_interface geometry_msgs)
+ament_target_dependencies(turtle_mover rclcpp turtlesim celestial_turtle_interface geometry_msgs std_msgs)
 
 install(TARGETS
         turtle_spawner

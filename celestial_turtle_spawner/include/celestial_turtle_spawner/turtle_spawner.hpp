@@ -10,6 +10,7 @@
 #include "celestial_turtle_interface/msg/turtle.hpp"
 #include "turtlesim/srv/spawn.hpp"
 #include "celestial_turtle_lib/utils.hpp"
+#include "std_msgs/msg/bool.hpp"
 
 namespace celestial_turtle_spawner
 {
@@ -18,9 +19,8 @@ namespace celestial_turtle_spawner
     public:
         TurtleSpawner();
 
-        void SetMaxTurtlesToSpawn(unsigned int maxTurtles);
-
     private:
+        void callbackKillNode(const std_msgs::msg::Bool::SharedPtr shouldTerminate);
         void TimerCallBack();
         /**
          * @brief Spawns a new turtle at a random pose
@@ -39,6 +39,7 @@ namespace celestial_turtle_spawner
         std::size_t m_maxTurtles{1};
         rclcpp::TimerBase::SharedPtr m_aliveTurtlePublishertimer;
         celestial_turtle_interface::msg::Turtles m_aliveTurtle;
+        rclcpp::Subscription<std_msgs::msg::Bool>::SharedPtr m_stopNodeSubscriber;
     };
 
 } /* namespace celestial_turtle_spawner */

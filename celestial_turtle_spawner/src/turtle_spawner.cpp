@@ -1,6 +1,5 @@
 #include "celestial_turtle_spawner/turtle_spawner.hpp"
 
-
 namespace celestial_turtle_spawner
 {
     TurtleSpawner::TurtleSpawner() : Node("celestial_turtle_spawner")
@@ -10,6 +9,16 @@ namespace celestial_turtle_spawner
         m_timer = this->create_wall_timer(std::chrono::seconds(3), std::bind(&TurtleSpawner::TimerCallBack, this));
         m_aliveTurtlePublisher = this->create_publisher<celestial_turtle_interface::msg::Turtles>("alive_turtles", 10);
         m_aliveTurtlePublishertimer = this->create_wall_timer(std::chrono::seconds(1), std::bind(&TurtleSpawner::PublishAliveTurtles, this));
+        m_stopNodeSubscriber = this->create_subscription<std_msgs::msg::Bool>("kill_nodes",
+                                                                              10, std::bind(&TurtleSpawner::callbackKillNode, this, std::placeholders::_1));
+    }
+    void TurtleSpawner::callbackKillNode(const std_msgs::msg::Bool::SharedPtr shouldTerminate)
+    {
+        if (shouldTerminate->data)
+        {
+            RCLCPP_WARN(this->get_logger(), "Shut");
+            rclcpp::shutdown();
+        }
     }
 
     void TurtleSpawner::TimerCallBack()
@@ -63,7 +72,6 @@ namespace celestial_turtle_spawner
 
     void TurtleSpawner::PublishAliveTurtles()
     {
-        RCLCPP_INFO(this->get_logger(), "PublishAliveTurtles");
         m_aliveTurtle.turtles = m_aliveTurtles;
         m_aliveTurtlePublisher->publish(m_aliveTurtle);
     }

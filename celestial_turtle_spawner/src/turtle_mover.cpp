@@ -7,6 +7,16 @@ namespace celestial_turtle_spawner
         m_aliveTurleSubscriber = this->create_subscription<celestial_turtle_interface::msg::Turtles>("alive_turtles",
                                                                                                      10, std::bind(&TurtleMover::CallbackAliveTurtles, this, std::placeholders::_1));
         m_timer = this->create_wall_timer(std::chrono::milliseconds(500), std::bind(&TurtleMover::TimerCallBack, this));
+        m_stopNodeSubscriber = this->create_subscription<std_msgs::msg::Bool>("kill_nodes",
+                                                                              10, std::bind(&TurtleMover::callbackKillNode, this, std::placeholders::_1));
+    }
+    void TurtleMover::callbackKillNode(const std_msgs::msg::Bool::SharedPtr shouldTerminate)
+    {
+        if (shouldTerminate->data)
+        {
+             RCLCPP_WARN(this->get_logger(), "Shut");
+            rclcpp::shutdown();
+        }
     }
 
     void TurtleMover::TimerCallBack()
@@ -22,7 +32,7 @@ namespace celestial_turtle_spawner
             if (cmdVelPublisher)
             {
                 auto cmdVelocityMessage = geometry_msgs::msg::Twist();
-                cmdVelocityMessage.linear.x = 0.5;
+                cmdVelocityMessage.linear.x = 2.0;
                 cmdVelPublisher->publish(cmdVelocityMessage);
             }
         }

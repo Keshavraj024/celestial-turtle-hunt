@@ -11,12 +11,22 @@ TurtleHunter::TurtleHunter() : Node("turtle_hunter_node")
     m_spawnPositionY = this->get_parameter("spawn_position_y").as_double();
     m_spawnOrientation = this->get_parameter("spawn_orientation").as_double();
     m_spawnThread = std::thread(std::bind(&TurtleHunter::spawnTurle, this));
+
+    m_stopNodeSubscriber = this->create_subscription<std_msgs::msg::Bool>("kill_nodes",
+                                                                          10, std::bind(&TurtleHunter::callbackKillNode, this, std::placeholders::_1));
 }
 
+void TurtleHunter::callbackKillNode(const std_msgs::msg::Bool::SharedPtr shouldTerminate)
+{
+    if (shouldTerminate->data)
+    {
+        rclcpp::shutdown();
+    }
+}
 
 void TurtleHunter::spawnTurle()
 {
-    celestial_turtle_lib::killTurtle(this,"turtle1");
+    celestial_turtle_lib::killTurtle(this, "turtle1");
     auto client = this->create_client<turtlesim::srv::Spawn>("spawn");
     while (!client->wait_for_service(std::chrono::seconds(1)))
     {
